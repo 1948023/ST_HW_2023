@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Disegna elementi su Canvas</title>
+</head>
+<body>
+    <canvas id="myCanvas" width="400" height="400"></canvas>
+
+    <script>
+        // Ottieni il riferimento all'elemento canvas dal DOM
+        var canvas = document.getElementById('myCanvas');
+
+        // Ottieni il contesto di rendering 2D del canvas
+        var ctx = canvas.getContext('2d');
+
+        // Disegna una linea
+        ctx.beginPath();
+        ctx.moveTo(50, 50);
+        ctx.lineTo(200, 50);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Disegna un punto
+        ctx.beginPath();
+        ctx.arc(100, 100, 5, 0, 2 * Math.PI);
+        ctx.fillStyle = 'black';
+        ctx.fill();
+
+        // Disegna un cerchio
+        ctx.beginPath();
+        ctx.arc(200, 200, 50, 0, 2 * Math.PI);
+        ctx.strokeStyle = 'black';
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // Disegna un rettangolo
+        ctx.fillStyle = 'black';
+        ctx.fillRect(50, 250, 100, 50);
+    </script>
+</body>
+</html>
