@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Data Structures in JavaScript</title>
+</head>
+<body>
+    <script>
+        // Array
+        const myArray = [1, 2, 3, 4, 5];
+
+        // Loop (for loop)
+        for (let i = 0; i < myArray.length; i++) {
+            if (myArray[i] === 3) {
+                console.log(`Found 3 at index ${i}`);
+                continue; // Continue to the next iteration
+            }
+            console.log(myArray[i]);
+        }
+
+        // Add
+        myArray.push(6);
+
+        // Remove
+        const indexToRemove = myArray.indexOf(2);
+        if (indexToRemove !== -1) {
+            myArray.splice(indexToRemove, 1);
+        }
+
+        // Check Existence
+        const exists = myArray.includes(4);
+
+        console.log("Array:", myArray);
+
+        // Dictionary (Object in JavaScript)
+        const myDictionary = {};
+
+        // Add
+        myDictionary["Key1"] = 10;
+
+        // Remove
+        delete myDictionary["Key1"];
+
+        // Get
+        const value = myDictionary["Key1"];
+
+        // Check Existence
+        const keyExists = "Key1" in myDictionary;
+
+        console.log("Dictionary:", myDictionary);
+
+        // HashSet (JavaScript Set)
+        const myHashSet = new Set([1, 2, 3, 4, 5]);
+
+        // Loop (for...of loop)
+        for (const item of myHashSet) {
+            if (item === 3) {
+                console.log("Found 3 in the set");
+                continue; // Continue to the next iteration
+            }
+            console.log(item);
+        }
+
+        // Add
+        myHashSet.add(6);
+
+        // Remove
+        myHashSet.delete(2);
+
+        // Check Existence
+        const setExists = myHashSet.has(4);
+
+        console.log("HashSet:", myHashSet);
+
+        // Queue (Using Arrays)
+        const myQueue = [];
+
+        // Add
+        myQueue.push("Item1");
+
+        // Remove
+        const dequeuedItem = myQueue.shift();
+
+        // Loop (while loop)
+        while (myQueue.length > 0) {
+            const nextItem = myQueue.shift();
+            console.log("Dequeued:", nextItem);
+        }
+
+        // Check Existence
+        const queueExists = myQueue.includes("Item1");
+
+        console.log("Queue:", myQueue);
+
+        // Stack (Using Arrays)
+        const myStack = [];
+
+        // Add
+        myStack.push("Item1");
+
+        // Remove
+        const poppedItem = myStack.pop();
+
+        // Loop (while loop)
+        while (myStack.length > 0) {
+            const topItem = myStack.pop();
+            console.log("Popped:", topItem);
+        }
+
+        // Check Existence
+        const stackExists = myStack.includes("Item1");
+
+        console.log("Stack:", myStack);
+
+        // LinkedList (Custom Implementation)
+        class Node {
+            constructor(value) {
+                this.value = value;
+                this.next = null;
+            }
+        }
+
+        class LinkedList {
+            constructor() {
+                this.head = null;
+            }
+
+            add(value) {
+                const newNode = new Node(value);
+                if (!this.head) {
+                    this.head = newNode;
+                } else {
+                    let current = this.head;
+                    while (current.next) {
+                        current = current.next;
+                    }
+                    current.next = newNode;
+                }
+            }
+
+            remove(value) {
+                if (!this.head) {
+                    return;
+                }
+                if (this.head.value === value) {
+                    this.head = this.head.next;
+                    return;
+                }
+                let current = this.head;
+                while (current.next) {
+                    if (current.next.value === value) {
+                        current.next = current.next.next;
+                        return;
+                    }
+                    current = current.next;
+                }
+            }
+
+            contains(value) {
+                let current = this.head;
+                while (current) {
+                    if (current.value === value) {
+                        return true;
+                    }
+                    current = current.next;
+                }
+                return false;
+            }
+        }
+
+        const myList = new LinkedList();
+        myList.add("Item1");
+        myList.add("Item2");
+        myList.add("Item3");
+
+        // Check Existence
+        const linkedListExists = myList.contains("Item2");
+
+        console.log("LinkedList:", myList);
+    </script>
+</body>
+</html>
