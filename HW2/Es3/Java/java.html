@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Random Distribution</title>
+</head>
+<body>
+    <h1>Random Distribution</h1>
+
+    <label for="n">Number of Variates (N):</label>
+    <input type="number" id="n" value="1000">
+
+    <label for="k">Number of Class Intervals (k):</label>
+    <input type="number" id="k" value="10">
+
+    <button onclick="generateRandomVariates()">Generate</button>
+
+    <div id="results">
+        <!-- Results will be displayed here -->
+    </div>
+
+    <script>
+        function generateRandomVariates() {
+            const N = parseInt(document.getElementById("n").value);
+            const k = parseInt(document.getElementById("k").value);
+
+            // Initialize an array to store the counts for each class interval.
+            const counts = new Array(k).fill(0);
+
+            // Generate random variates and count them in class intervals.
+            for (let i = 0; i < N; i++) {
+                const randomValue = Math.random(); // Generate a random value in [0,1).
+                const interval = Math.floor(randomValue * k); // Determine the interval index.
+                counts[interval]++; // Increment the count for the interval.
+            }
+
+            // Display the counts for each class interval.
+            const resultsDiv = document.getElementById("results");
+            resultsDiv.innerHTML = "<h2>Class Intervals and Counts:</h2>";
+
+            for (let i = 0; i < k; i++) {
+                const lowerBound = (i / k).toFixed(2);
+                const upperBound = ((i + 1) / k).toFixed(2);
+                const count = counts[i];
+                const resultText = `[${lowerBound}, ${upperBound}): ${count}<br>`;
+                resultsDiv.innerHTML += resultText;
+            }
+        }
+    </script>
+</body>
+</html>
