@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Frequency Distribution Calculator</title>
+</head>
+<body>
+    <h1>Frequency Distribution Calculator</h1>
+
+    <h2>Variable 1: Qualitative</h2>
+    <input type="text" id="qualitativeData" placeholder="Enter Qualitative Data (comma-separated)" style="width: 300px;"><br><br>
+
+    <h2>Variable 2: Quantitative Discrete</h2>
+    <input type="text" id="discreteData" placeholder="Enter Discrete Data (comma-separated)" style="width: 300px;"><br><br>
+
+    <h2>Variable 3: Quantitative Continuous (Class Intervals)</h2>
+    <input type="text" id="continuousData" placeholder="Enter Continuous Data (comma-separated, e.g., 10-20,20-30)" style="width: 300px;"><br><br>
+
+    <button onclick="computeDistributions()">Compute Distributions</button>
+
+    <h2>Frequency Distributions:</h2>
+    <pre id="output"></pre>
+
+    <script>
+        function computeDistributions() {
+            const qualitativeData = document.getElementById("qualitativeData").value.split(',').map(item => item.trim());
+            const discreteData = document.getElementById("discreteData").value.split(',').map(item => parseInt(item.trim()));
+            const continuousData = document.getElementById("continuousData").value.split(',').map(item => item.trim());
+
+            // Frequency Distribution for Qualitative Variable
+            const qualitativeFrequency = {};
+            qualitativeData.forEach(item => {
+                if (!qualitativeFrequency[item]) {
+                    qualitativeFrequency[item] = 1;
+                } else {
+                    qualitativeFrequency[item]++;
+                }
+            });
+
+            // Frequency Distribution for Quantitative Discrete Variable
+            const discreteFrequency = {};
+            discreteData.forEach(item => {
+                if (!isNaN(item)) {
+                    if (!discreteFrequency[item]) {
+                        discreteFrequency[item] = 1;
+                    } else {
+                        discreteFrequency[item]++;
+                    }
+                }
+            });
+
+            // Frequency Distribution for Quantitative Continuous Variable
+            const continuousFrequency = {};
+            continuousData.forEach(item => {
+                const [rangeStart, rangeEnd] = item.split('-').map(part => parseFloat(part));
+                for (let i = rangeStart; i <= rangeEnd; i++) {
+                    if (!continuousFrequency[`${rangeStart}-${rangeEnd}`]) {
+                        continuousFrequency[`${rangeStart}-${rangeEnd}`] = 1;
+                    } else {
+                        continuousFrequency[`${rangeStart}-${rangeEnd}`]++;
+                    }
+                }
+            });
+
+            // Output the Frequency Distributions
+            const output = `
+                Qualitative Variable Frequency Distribution:
+                ${JSON.stringify(qualitativeFrequency, null, 2)}
+
+                Quantitative Discrete Variable Frequency Distribution:
+                ${JSON.stringify(discreteFrequency, null, 2)}
+
+                Quantitative Continuous Variable Frequency Distribution:
+                ${JSON.stringify(continuousFrequency, null, 2)}
+            `;
+
+            document.getElementById("output").textContent = output;
+        }
+    </script>
+</body>
+</html>
