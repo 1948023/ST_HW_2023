@@ -9,13 +9,13 @@ using System.Windows.Forms;
 using System.Globalization;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sudoku {
-    public partial class SudokuForm : Form {
+namespace  {
+    public partial class Form : Form {
 
         private const int MaxRowAndColumn = 9;
-        private const int SudokuBoardLength = MaxRowAndColumn * MaxRowAndColumn;
+        private const int BoardLength = MaxRowAndColumn * MaxRowAndColumn;
 
-        uint[] sudoku1 =  //Example at program start //only for testing
+        uint[] 1 =  //Example at program start //only for testing
         {
             0,0,0, 0,0,0, 0,0,9,
             0,2,5, 0,0,8, 0,0,0,
@@ -31,23 +31,23 @@ namespace Sudoku {
         };
 
         private List<TextBox> tbList;
-        private uint[,] inputs = new uint[SudokuSolver.Max, SudokuSolver.Max];
-        private SudokuSolver sudoku = new SudokuSolver();
+        private uint[,] inputs = new uint[Solver.Max, Solver.Max];
+        private Solver  = new Solver();
         private volatile bool threadRunning;
         private bool outputsInTextboxes;
 
-        public SudokuForm() {
+        public Form() {
             if (!this.DesignMode) {
                 this.Font = SystemFonts.MessageBoxFont;
             }
             InitializeComponent();
             InitClickEvents();
-            InitSudokuBoardList();
-            InitSudokuBoard();
-            ClearSudokuBoard();
+            InitBoardList();
+            InitBoard();
+            ClearBoard();
             ClearInputsMatrix();
             //ToMatrix();  //only for testing
-            ValuesToSudokuBoard(inputs);
+            ValuesToBoard(inputs);
         }
 
         [SuppressMessage("Microsoft.Globalization", "CA1300:SpecifyMessageBoxOptions")]
@@ -66,8 +66,8 @@ namespace Sudoku {
             });
         }
 
-        private void InitSudokuBoardList() {
-            tbList = new List<TextBox>(SudokuBoardLength);
+        private void InitBoardList() {
+            tbList = new List<TextBox>(BoardLength);
             tbList.Add(textBox1);
             tbList.Add(textBox2);
             tbList.Add(textBox3);
@@ -151,7 +151,7 @@ namespace Sudoku {
             tbList.Add(textBox81);
         }
 
-        private void InitSudokuBoard() {
+        private void InitBoard() {
             TextBox tb;
             IEnumerator<TextBox> it = this.tbList.GetEnumerator();
             while (it.MoveNext()) {
@@ -165,7 +165,7 @@ namespace Sudoku {
             }
         }
 
-        private void ClearSudokuBoard() {
+        private void ClearBoard() {
             TextBox tb;
             IEnumerator<TextBox> it = this.tbList.GetEnumerator();
             while (it.MoveNext()) {
@@ -181,9 +181,9 @@ namespace Sudoku {
         private void ToMatrix() {  //only for testing
             uint row, column;
             uint i = 0;
-            for (row = 0; row < SudokuSolver.Max; row++) {
-                for (column = 0; column < SudokuSolver.Max; column++) {
-                    inputs[row, column] = sudoku1[i];
+            for (row = 0; row < Solver.Max; row++) {
+                for (column = 0; column < Solver.Max; column++) {
+                    inputs[row, column] = 1[i];
                     i++;
                 }
             }
@@ -191,7 +191,7 @@ namespace Sudoku {
         }
 
         [SuppressMessage("Microsoft.Performance", "CA1814:PreferJaggedArraysOverMultidimensional", MessageId = "0#")]
-        public void ValuesToSudokuBoard(uint[,] matrix) {
+        public void ValuesToBoard(uint[,] matrix) {
             if (matrix.GetLength(0) != MaxRowAndColumn && matrix.GetLength(1) != MaxRowAndColumn) {
                 throw new ArgumentException("Array length invalid", "matrix");
             }
@@ -206,14 +206,14 @@ namespace Sudoku {
                     tb.Text = value.ToString(CultureInfo.InvariantCulture);
                 }
                 column++;
-                if (column == SudokuSolver.Max) {
+                if (column == Solver.Max) {
                     column = 0;
                     row++;
                 }
             }
         }
 
-        private void SudokuBoardToInputsMatrix() {
+        private void BoardToInputsMatrix() {
             uint row = 0;
             uint column = 0;
             char ch;
@@ -230,7 +230,7 @@ namespace Sudoku {
                     }
                 }
                 column++;
-                if (column == SudokuSolver.Max) {
+                if (column == Solver.Max) {
                     column = 0;
                     row++;
                 }
@@ -239,17 +239,17 @@ namespace Sudoku {
 
         private void AbortThreadCalculation() {
             if (threadRunning) {
-                sudoku.Abort = true;
+                .Abort = true;
             }
             while (threadRunning) {
                 Thread.Sleep(50);
             }
-            sudoku.Abort = false;
+            .Abort = false;
         }
 
         private void NewToolStripMenuItem_Click(object sender, EventArgs e) {
             AbortThreadCalculation();
-            ClearSudokuBoard();
+            ClearBoard();
             ClearInputsMatrix();
             outputsInTextboxes = false;
         }
@@ -264,17 +264,17 @@ namespace Sudoku {
             dialog.CheckFileExists = true;
             dialog.CheckPathExists = true;
             if (dialog.ShowDialog() == DialogResult.OK) {
-                ClearSudokuBoard();
+                ClearBoard();
                 ClearInputsMatrix();
                 try {
-                    SudokuXmlReader.OpenSudokuFile(inputs, dialog.FileName);
+                    XmlReader.OpenFile(inputs, dialog.FileName);
                 }
-                catch (SudokuException ex) {
+                catch (Exception ex) {
                     MessageBox.Show(ex.Message);
-                    ClearSudokuBoard();
+                    ClearBoard();
                     ClearInputsMatrix();
                 }
-                ValuesToSudokuBoard(inputs);
+                ValuesToBoard(inputs);
                 ClearInputsMatrix();
                 outputsInTextboxes = false;
             }
@@ -287,9 +287,9 @@ namespace Sudoku {
             dialog.Filter = "(*.xml)|*.xml";
             if (dialog.ShowDialog() == DialogResult.OK) {
                 if (!outputsInTextboxes) {
-                    SudokuBoardToInputsMatrix();
+                    BoardToInputsMatrix();
                 }
-                SudokuXmlWriter.SaveInputs(inputs, dialog.FileName);
+                XmlWriter.SaveInputs(inputs, dialog.FileName);
             }
         }
 
@@ -303,21 +303,21 @@ namespace Sudoku {
                 return;
             }
             solveFileToolStripMenuItem.Enabled = false;
-            SudokuBoardToInputsMatrix();
+            BoardToInputsMatrix();
             this.Cursor = Cursors.WaitCursor;
             Parameter parameter = new Parameter(inputs, GetOption());
-            Action<Parameter> executeAction = sudoku.Execute;
+            Action<Parameter> executeAction = .Execute;
             threadRunning = true;
             executeAction.BeginInvoke(parameter,
                 delegate (IAsyncResult ar) {
                     executeAction.EndInvoke(ar);
                     uint[,] outputs = parameter.OutputValues;
-                    SudokuError errCode = parameter.ErrorCode;
+                    Error errCode = parameter.ErrorCode;
                     this.Invoke((MethodInvoker)delegate {
-                        if (errCode != SudokuError.None) {
+                        if (errCode != Error.None) {
                             MessageBox.Show(this, errCode.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
-                        ValuesToSudokuBoard(outputs);
+                        ValuesToBoard(outputs);
                         outputsInTextboxes = true;
                         solveFileToolStripMenuItem.Enabled = true;
                         this.Cursor = Cursors.Default;
@@ -327,18 +327,18 @@ namespace Sudoku {
                 , null);
         }
 
-        private SudokuOption GetOption() {
+        private Option GetOption() {
             if (!detailInfosToolStripMenuItem.Enabled) {
-                return SudokuOption.None;
+                return Option.None;
             }
             if (solveFileToolStripMenuItem.Checked) {
                 if (detailInfosToolStripMenuItem.Checked) {
-                    return SudokuOption.WithFileAddon;
+                    return Option.WithFileAddon;
                 } else {
-                    return SudokuOption.WithFile;
+                    return Option.WithFile;
                 }
             }
-            return SudokuOption.None;
+            return Option.None;
         }
 
         private void SolveFileToolStripMenuItem_Click(object sender, EventArgs e) {
@@ -385,7 +385,7 @@ namespace Sudoku {
         }
 
         private int AdjustIndex(int idx) {
-            if (idx >= 0 && idx < SudokuBoardLength) {
+            if (idx >= 0 && idx < BoardLength) {
                 return idx;
             } else if (idx < 0) {
                 return idx + tbList.Count;
