@@ -1,0 +1,4 @@
+<html> <body> <h2>Gaussian Distribution</h2> <p>Mean (μ): <input type="text" id="mean" value="0"></p> <p>Standard Deviation (σ): <input type="text" id="stdDev" value="1"></p> <p>Points (n): <input type="text" id="points" value="100"></p>
+    <button onclick="plotGaussian()">Plot Gaussian</button>
+    
+    <p>Output:</p> <pre id="output"></pre> <script> function plotGaussian() { const mean = parseFloat(document.getElementById("mean").value); const stdDev = parseFloat(document.getElementById("stdDev").value); const points = parseInt(document.getElementById("points").value); const output = document.getElementById("output"); const gaussian = new Array(points); for (let i = 0; i < points; i++) { const x = mean + (i - (points - 1) / 2) * (1.0 / points) * stdDev * 6; const y = Math.exp(-0.5 * Math.pow((x - mean) / stdDev, 2)) / (stdDev * Math.sqrt(2 * Math.PI)); gaussian[i] = [x, y]; } output.textContent = JSON.stringify(gaussian, null, 2); } </script> </body> </html>
