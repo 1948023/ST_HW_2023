@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Standalone Page</title>
+</head>
+<body>
+    <label for="p-value">P Value:</label>
+    <input type="number" id="p-value" name="p-value" min="2" max="100" required>
+    <br>
+    <label for="s-value">S Value:</label>
+    <input type="number" id="s-value" name="s-value" min="20" max="100" required>
+    <br>
+    <button onclick="calculateProbability()">Calculate Probability</button>
+    <p id="result"></p>
+
+    <script>
+        function calculateProbability() {
+            const pValue = document.getElementById('p-value').value;
+            const sValue = document.getElementById('s-value').value;
+
+            if (pValue < 2 || pValue > 100 || sValue < 20 || sValue > 100) {
+                alert("Please enter a valid P and S value!");
+                return;
+            }
+
+            let totalAttacks = 0;
+            let totalShielded = 0;
+            const random = Math.random;
+            while (true) {
+                const securityScore = random() < 0.5 ? -1 : 1;
+                if (securityScore === -1) totalAttacks++;
+                if (securityScore === 1) totalShielded++;
+                if (totalAttacks >= pValue || totalShielded >= sValue) break;
+            }
+
+            const probability = totalAttacks / (totalAttacks + totalShielded);
+            document.getElementById('result').textContent = `The probability of the system being discarded is ${probability * 100}%`;
+        }
+    </script>
+</body>
+</html>
