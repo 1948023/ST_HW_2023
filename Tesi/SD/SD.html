@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribution Simulations</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        canvas {
+            border: 1px solid #ccc;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Distribution Simulations</h1>
+    
+    <button onclick="simulateNormalDistribution()">Simulate Normal Distribution</button>
+    <button onclick="simulateBinomialDistribution()">Simulate Binomial Distribution</button>
+    
+    <canvas id="chartCanvas" width="400" height="300"></canvas>
+
+    <script>
+        // Random number generator function
+        function getRandom() {
+            return Math.random();
+        }
+
+        // Generate a random number from a normal distribution
+        function generateRandomFromNormalDistribution(mean, stdDev) {
+            const u1 = 1.0 - getRandom();
+            const u2 = 1.0 - getRandom();
+            const randStdNormal = Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(2.0 * Math.PI * u2);
+            return mean + stdDev * randStdNormal;
+        }
+
+        // Generate a random number from a binomial distribution
+        function generateRandomFromBinomialDistribution(numTrials, probability) {
+            let successes = 0;
+            for (let i = 0; i < numTrials; i++) {
+                if (getRandom() < probability)
+                    successes++;
+            }
+            return successes;
+        }
+
+        // Simulate and visualize the normal distribution
+        function simulateNormalDistribution() {
+            const numSamples = 1000;
+            const samples = [];
+
+            for (let i = 0; i < numSamples; i++) {
+                const sample = generateRandomFromNormalDistribution(0, 1);
+                samples.push(sample);
+            }
+
+            visualizeDistribution(samples);
+        }
+
+        // Simulate and visualize the binomial distribution
+        function simulateBinomialDistribution() {
+            const numTrials = 20;
+            const probability = 0.5;
+            const samples = [];
+
+            for (let i = 0; i < numTrials; i++) {
+                const sample = generateRandomFromBinomialDistribution(numTrials, probability);
+                samples.push(sample);
+            }
+
+            visualizeDistribution(samples);
+        }
+
+        // Visualize the distribution using a histogram
+        function visualizeDistribution(data) {
+            const canvas = document.getElementById('chartCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const binWidth = 20;
+            const bins = {};
+
+            // Count occurrences in each bin
+            data.forEach(value => {
+                const binIndex = Math.floor(value / binWidth) * binWidth;
+                bins[binIndex] = (bins[binIndex] || 0) + 1;
+            });
+
+            // Find the maximum frequency for scaling
+            const maxFrequency = Math.max(...Object.values(bins));
+
+            // Draw histogram bars
+            for (const [binIndex, frequency] of Object.entries(bins)) {
+                const x = parseInt(binIndex);
+                const barHeight = (frequency / maxFrequency) * canvas.height;
+                ctx.fillStyle = 'blue';
+                ctx.fillRect(x, canvas.height - barHeight, binWidth, barHeight);
+                ctx.strokeStyle = 'black';
+                ctx.strokeRect(x, canvas.height - barHeight, binWidth, barHeight);
+            }
+        }
+    </script>
+</body>
+</html>
