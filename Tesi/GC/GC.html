@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Glivenko-Cantelli Simulation</title>
+ <style>
+    .box {
+      display: inline-block;
+      margin: 5px;
+      padding: 5px;
+      border: 1px solid black;
+      text-align: center;
+    }
+ </style>
+</head>
+<body>
+ <button onclick="simulate()">Simulate</button>
+ <div id="results"></div>
+ <script>
+    function simulate() {
+      const results = document.getElementById("results");
+      results.innerHTML = "";
+
+      const sampleSize = 1000;
+      const uniformSample = Array.from({ length: sampleSize }, () => Math.random());
+      const empiricalDistribution = calculateEmpiricalDistribution(uniformSample);
+
+      for (let i = 0; i < empiricalDistribution.length; i++) {
+        const bar = document.createElement("div");
+        bar.className = "box";
+        bar.style.height = (empiricalDistribution[i] * 100) + "px";
+        bar.textContent = empiricalDistribution[i].toFixed(2);
+        results.appendChild(bar);
+      }
+    }
+
+    function calculateEmpiricalDistribution(sample) {
+      const min = Math.min(...sample);
+      const max = Math.max(...sample);
+      const intervalWidth = (max - min) / sample.length;
+      const empiricalDistribution = Array.from({ length: sample.length }, () => 0);
+
+      for (let i = 0; i < sample.length; i++) {
+        const intervalIndex = Math.floor((sample[i] - min) / intervalWidth);
+        empiricalDistribution[intervalIndex]++;
+      }
+
+      for (let i = 0; i < empiricalDistribution.length; i++) {
+        empiricalDistribution[i] /= sample.length;
+      }
+
+      return empiricalDistribution;
+    }
+  </script>
+</body>
+</html>
