@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ito Integration Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #integralResult {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Ito Integration Simulation</h1>
+<button onclick="startSimulation()">Start Simulation</button>
+<p id="integralResult">Integral Result: 0.00</p>
+
+<script>
+    const numSteps = 100;
+    let integralResult = 0;
+
+    function simulateItoIntegration() {
+        for (let i = 0; i < numSteps; i++) {
+            const integrand = Math.random(); // Replace with your specific integrand
+            const dW = randomGaussian(); // Wiener increment
+
+            integralResult += integrand * dW;
+
+            // Update UI or perform other actions for each step
+            updateIntegralResultLabel();
+
+            // Optional: Add a delay to visualize the simulation
+            sleep(50);
+        }
+    }
+
+    function updateIntegralResultLabel() {
+        document.getElementById('integralResult').textContent = `Integral Result: ${integralResult.toFixed(2)}`;
+    }
+
+    function startSimulation() {
+        // Start the Ito Integration simulation
+        simulateItoIntegration();
+    }
+
+    // Function to generate random Gaussian values
+    function randomGaussian() {
+        let u1 = 1.0 - Math.random();
+        let u2 = 1.0 - Math.random();
+        return Math.sqrt(-2.0 * Math.log(u1)) * Math.sin(2.0 * Math.PI * u2);
+    }
+
+    // Function for a delay
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+</script>
+
+</body>
+</html>
