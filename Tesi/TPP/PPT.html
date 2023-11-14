@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Poisson Process Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        #eventCount {
+            font-size: 20px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Poisson Process Simulation</h1>
+<button onclick="startSimulation()">Start Simulation</button>
+<p id="eventCount">Event Count: 0</p>
+
+<script>
+    let eventCount = 0;
+    const lambda = 0.5; // Adjust the rate parameter as needed
+    let simulationInterval;
+
+    function simulatePoissonProcess() {
+        const interEventTime = -Math.log(Math.random()) / lambda;
+        eventCount++;
+
+        // Update UI or perform other actions for each event
+        updateEventCountLabel();
+
+        // Schedule the next event
+        simulationInterval = setTimeout(simulatePoissonProcess, interEventTime * 1000);
+    }
+
+    function startSimulation() {
+        // Clear any existing simulation
+        clearInterval(simulationInterval);
+
+        // Start the Poisson Process simulation
+        simulatePoissonProcess();
+    }
+
+    function updateEventCountLabel() {
+        document.getElementById('eventCount').textContent = `Event Count: ${eventCount}`;
+    }
+</script>
+
+</body>
+</html>
