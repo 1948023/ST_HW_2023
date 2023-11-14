@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donsker's Invariance Principle Simulation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        button {
+            padding: 10px;
+            font-size: 16px;
+        }
+        canvas {
+            border: 1px solid #000;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Donsker's Invariance Principle Simulation</h1>
+<button onclick="startSimulation()">Start Simulation</button>
+<canvas id="simulationCanvas" width="500" height="200"></canvas>
+
+<script>
+    const canvas = document.getElementById('simulationCanvas');
+    const context = canvas.getContext('2d');
+    const sampleSize = 1000;
+
+    function simulateDonsker() {
+        const empiricalProcessValues = [];
+        let currentValue = 0;
+
+        for (let i = 0; i < sampleSize; i++) {
+            const randomStep = Math.random() < 0.5 ? -1 : 1;
+            currentValue += randomStep / Math.sqrt(sampleSize);
+            empiricalProcessValues.push(currentValue);
+        }
+
+        // Update UI or perform other actions for each step
+        updateChart(empiricalProcessValues);
+    }
+
+    function updateChart(empiricalProcessValues) {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        context.beginPath();
+        context.moveTo(0, canvas.height / 2);
+
+        const stepSize = canvas.width / sampleSize;
+
+        for (let i = 0; i < sampleSize; i++) {
+            const x = i * stepSize;
+            const y = empiricalProcessValues[i] * (canvas.height / 2) + (canvas.height / 2);
+            context.lineTo(x, y);
+        }
+
+        context.stroke();
+    }
+
+    function startSimulation() {
+        // Start the Donsker's Invariance Principle simulation
+        simulateDonsker();
+    }
+</script>
+
+</body>
+</html>
